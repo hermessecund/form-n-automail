@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiImage, FiVideo } from 'react-icons/fi';
 
-import { ImageUpload, VideoUpload, validateImage, validateVideo } from './media-input';
+import { ImageUpload, VideoUpload } from './media-input';
 import { TextInputs } from './text-input'
 
 type FormValues = {
@@ -28,8 +28,9 @@ export default function Form({code}) {
   const [name, setName] = useState('');
   const [img, setImg] = useState('Upload Image');
   const [vid, setVid] = useState('Upload Video');
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>()
-  const onSubmit = handleSubmit(({img_, vid_}) => console.log({name:name, text:text, email:email, img:img_[0], vid:vid_[0]}))
+  const [imgValid, setImgValid] = useState(true);
+  const [vidValid, setVidValid] = useState(true);
+  const { register } = useForm<FormValues>()
   const seshStatus = sessionStorage.getItem('suntoes-form')
 
   useEffect(():any=>{
@@ -39,11 +40,19 @@ export default function Form({code}) {
     }
   },[])
 
-  if(code===1 || seshStatus === 'done') return (
+  if((code===1) || seshStatus === 'done') return (
     <Stack spacing={{ base: 10, md: 20 }} marginTop={'30vh'} marginLeft={'10vw'}>
         <Heading
           lineHeight={1.1}
+          zIndex={9}
           fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}>
+          One time form{' '}
+          <Text
+            as={'span'}
+            bgGradient="linear(to-r, red.400,pink.400)"
+            bgClip="text">
+            done.
+          </Text>{' '}
           An email has been{' '}
           <Text
             as={'span'}
@@ -96,14 +105,14 @@ export default function Form({code}) {
       py={{ base: 10, sm: 20, lg: 32 }}>
       <Stack spacing={{ base: 10, md: 20 }}>
         <Stack
-        bg={'gray.50'}
+        bg={'rgba(249, 249, 249, 0.7)'}
         rounded={'xl'}
         p={{ base: 4, sm: 6, md: 8 }}
         spacing={{ base: 8 }}
         maxW={{ lg: 'lg' }}>
         <Stack spacing={4}>
           <Heading
-            color={'gray.800'}
+            color={'#555'}
             lineHeight={1.1}
             fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
             Fill up{' '}
@@ -115,7 +124,7 @@ export default function Form({code}) {
             </Text>
             {' '}it'll be sent right back to your mail
           </Heading>
-          <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+          <Text color={'#555'} fontSize={{ base: 'sm', sm: 'md' }}>
            chakra-ui, multer & nodemailer demo by suntoes
           </Text>
         </Stack>
@@ -123,35 +132,52 @@ export default function Form({code}) {
           <form 
             method="POST" 
             action="/upload" 
-            encType="multipart/form-data" >
+            encType="multipart/form-data" 
+          >
           <Stack spacing={4}>
             {TextInputs( name, setName, email, setEmail, text, setText )}
-            <FormControl isInvalid={!!errors.img_}>
+            <FormControl 
+              isInvalid={!imgValid} 
+              isRequired>
               <ImageUpload
                 accept={'image/*'}
-                register={register('img_', { validate: validateImage })}
+                register={register('img_')}
                 func={setImg}
+                valid={setImgValid}
               >
-                <Button leftIcon={<Icon as={FiImage} />} fontFamily={'heading'} bg={'gray.200'} color={'gray.800'} w={'100%'}>
+                <Button
+                  position={'absolute'}
+                  zIndex={1}
+                  leftIcon={<Icon as={FiImage} />} 
+                  fontFamily={'heading'} bg={'gray.200'} color={"#555"} w={'100%'}
+                >
                   {img}
                 </Button>
               </ImageUpload>
               <FormErrorMessage>
-                {errors.img_ && errors?.img_.message}
+                'must be less than 5mb'
               </FormErrorMessage>
             </FormControl>
-            <FormControl isInvalid={!!errors.vid_}>
+            <FormControl 
+              isInvalid={!vidValid} 
+              isRequired>
               <VideoUpload
                 accept={'video/*'}
-                register={register('vid_', { validate: validateVideo })}
+                register={register('vid_')}
                 func={setVid}
+                valid={setVidValid}
               >
-                <Button leftIcon={<Icon as={FiVideo} />} fontFamily={'heading'} bg={'gray.200'} color={'gray.800'} w={'100%'}>
+                <Button 
+                  position={'absolute'}
+                  zIndex={1}
+                  type="button" 
+                  leftIcon={<Icon as={FiVideo} />} 
+                  fontFamily={'heading'} bg={'gray.200'} color={'#555'} w={'100%'}>
                   {vid}
                 </Button>
               </VideoUpload>
               <FormErrorMessage>
-                {errors.vid_ && errors?.vid_.message}
+              'must be less than 10mb'
               </FormErrorMessage>
             </FormControl>
           </Stack>
@@ -165,7 +191,9 @@ export default function Form({code}) {
             _hover={{
               bgGradient: 'linear(to-r, red.400,pink.400)',
               boxShadow: 'xl',
-            }}>
+            }}
+            isDisabled={!imgValid || !vidValid}
+            >
             Submit
           </Button>
           </form>

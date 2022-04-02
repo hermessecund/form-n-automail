@@ -15,7 +15,7 @@ export const TextInputs = ( name, setName, email, setEmail, text, setText ) => {
               }}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              isRequired={true}
+              isRequired
             />
             <Input
               name='email'
@@ -27,7 +27,7 @@ export const TextInputs = ( name, setName, email, setEmail, text, setText ) => {
               _placeholder={{
                 color: 'gray.500',
               }}
-              isRequired={true}
+              isRequired
               type='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -44,7 +44,7 @@ export const TextInputs = ( name, setName, email, setEmail, text, setText ) => {
               }}
               value={text}
               onChange={(e) => setText(e.target.value)}
-              isRequired={true}
+              isRequired
             />
         </>
     )
