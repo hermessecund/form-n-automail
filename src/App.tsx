@@ -33,7 +33,6 @@ function App() {
               href='https://github.com/suntoes/form-n-automail' 
               target={'_blank'} 
               rel="noreferrer">
-              
               <FiGithub />
             </a>
           </Heading>
