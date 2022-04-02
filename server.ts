@@ -53,6 +53,7 @@ app.use(express.static('build'));
 app.post('/upload', multipleUploads, async(req, res)=>{
     const { name, email, text } = req.body;
     const { img_, vid_ } = req.files;
+    console.log('email request')
     await transporter.sendMail(mailOptions(email, name, text, img_[0], vid_[0]), async(err, data) => {
         if (err) {
             console.log(err);
@@ -63,7 +64,7 @@ app.post('/upload', multipleUploads, async(req, res)=>{
         try {
             await fs.unlink(img_[0].path);
             await fs.unlink(vid_[0].path);
-            console.log('file successfully deleted');
+            console.log('file cleaned');
             res.redirect('/done');
           } catch (error:any) {
             console.error('there was an error:', error.message);
