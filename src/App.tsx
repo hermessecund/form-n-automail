@@ -9,29 +9,26 @@ function App() {
   return (
     <ChakraProvider theme={theme} >
       <Router>
-        <Box position={'relative'} display='flex' h='90vh'>
+        <Box display='flex' flexDirection={'column'} h='100%'>
+        <Box position={'relative'} display='flex' minH={'90vh'} h='100%'>
           <Routes>
             <Route path='/' element={<Form code={0} />}/>
             <Route path='/done' element={<Form code={1} />}/>
             <Route path='/err' element={<Form code={2} />}/>
             <Route path='/*' element={<Form code={3} />}/>
           </Routes>
-        <Blur
-            position={'fixed'}
-            overflow='hidden'
-            top={-10}
-            left={-10}
-            style={{ filter: 'blur(60px)', transform: 'scale(2)'  }}
-            />
         </Box>
         <Box 
           display='flex' 
           justifyContent={'center'} 
-          h='10vh'>
+          minH='10vh'
+          >
           <Heading 
             cursor={'pointer'}
             _hover={{ color:"limegreen" }}
-            fontSize={{ base: '3xl', sm: '4xl', md: '5xl' }}>
+            fontSize={{ base: '3xl', sm: '4xl', md: '5xl' }}
+            style={{padding: '10px'}}
+            >
             <a 
               href='https://github.com/suntoes/form-n-automail' 
               target={'_blank'} 
@@ -41,6 +38,14 @@ function App() {
             </a>
           </Heading>
         </Box>
+        </Box>
+        <Blur
+            position={'fixed'}
+            overflow='hidden'
+            top={-10}
+            left={-10}
+            style={{ filter: 'blur(60px)', transform: 'scale(2)'  }}
+            />
       </Router>
     </ChakraProvider>
   );
